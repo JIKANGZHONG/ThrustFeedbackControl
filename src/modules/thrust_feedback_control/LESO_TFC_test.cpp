@@ -1099,15 +1099,14 @@ int ThrustFeedbackControl::main()
 
         // 各控制量占比记录
         thrustcontroldata.fb_p_part[0] = (_iolc.kp * _iolc.err)/static_cast<float>(_iolc.g_x);
-        thrustcontroldata.fb_p_part[1] = (_iolc.kp * _iolc2.err)/static_cast<float>(_iolc2.g_x);
-        thrustcontroldata.fb_p_part[2] = (_iolc.kp * _iolc3.err)/static_cast<float>(_iolc3.g_x);
-        thrustcontroldata.fb_p_part[3] = (_iolc.kp * _iolc4.err)/static_cast<float>(_iolc4.g_x);
+        thrustcontroldata.fb_p_part[1] = (_iolc2.kp * _iolc2.err)/static_cast<float>(_iolc2.g_x);
+        thrustcontroldata.fb_p_part[2] = (_iolc3.kp * _iolc3.err)/static_cast<float>(_iolc3.g_x);
+        thrustcontroldata.fb_p_part[3] = (_iolc4.kp * _iolc4.err)/static_cast<float>(_iolc4.g_x);
 
         thrustcontroldata.fb_i_part[0] = (_iolc.ki * _iolc.err_integral)/static_cast<float>(_iolc.g_x);
-        thrustcontroldata.fb_i_part[1] = (_iolc.ki * _iolc2.err_integral)/static_cast<float>(_iolc2.g_x);
-        thrustcontroldata.fb_i_part[2] = (_iolc.ki * _iolc3.err_integral)/static_cast<float>(_iolc3.g_x);
-        thrustcontroldata.fb_i_part[3] = (_iolc.ki * _iolc4.err_integral)/static_cast<float>(_iolc4.g_x);
-
+        thrustcontroldata.fb_i_part[1] = (_iolc2.ki * _iolc2.err_integral)/static_cast<float>(_iolc2.g_x);
+        thrustcontroldata.fb_i_part[2] = (_iolc3.ki * _iolc3.err_integral)/static_cast<float>(_iolc3.g_x);
+        thrustcontroldata.fb_i_part[3] = (_iolc4.ki * _iolc4.err_integral)/static_cast<float>(_iolc4.g_x);
         thrustcontroldata.fb_nolin_part[0] = static_cast<float>(_iolc.f_x) / static_cast<float>(_iolc.g_x);
         thrustcontroldata.fb_nolin_part[1] = static_cast<float>(_iolc2.f_x) / static_cast<float>(_iolc2.g_x);
         thrustcontroldata.fb_nolin_part[2] = static_cast<float>(_iolc3.f_x) / static_cast<float>(_iolc3.g_x);
