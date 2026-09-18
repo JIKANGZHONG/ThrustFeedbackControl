@@ -8,6 +8,8 @@ float32 thrust_kalman_filter_data_2
 float32 thrust_kalman_filter_data_3
 float32 thrust_kalman_filter_data_4
 
+float32[4] sensor_auto_bias
+
 # float32 thrust_raw_data2_1
 # float32 thrust_raw_data2_2
 # float32 thrust_raw_data2_3

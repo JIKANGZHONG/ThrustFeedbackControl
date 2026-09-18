@@ -679,6 +679,11 @@ int ThrustFeedbackControl::main()
 		thrustdata.thrust_raw_comp[1] = (static_cast<float>(sensordata.data2) + _param_sensor2_bias1.get() + auto_bias1) / 1000.0f;
 		thrustdata.thrust_raw_comp[2] = (static_cast<float>(sensordata.data3) + _param_sensor3_bias1.get() + auto_bias2) / 1000.0f;
 		thrustdata.thrust_raw_comp[3] = (static_cast<float>(sensordata.data4) + _param_sensor4_bias1.get() + auto_bias3) / 1000.0f;
+
+		thrustdata.sensor_auto_bias[0] = auto_bias0/1000.0f;
+		thrustdata.sensor_auto_bias[1] = auto_bias1/1000.0f;
+		thrustdata.sensor_auto_bias[2] = auto_bias2/1000.0f;
+		thrustdata.sensor_auto_bias[3] = auto_bias3/1000.0f;
 		// Model 1: original bias1 + bias2 compensation
 		thrustdata.thrust_raw_comp[0] = (thrustdata.thrust_raw_comp[0] > 2.0f) ? 2.0f : ((thrustdata.thrust_raw_comp[0] < 0.0f) ? 0.0f : thrustdata.thrust_raw_comp[0]);
 		thrustdata.thrust_raw_comp[1] = (thrustdata.thrust_raw_comp[1] > 2.0f) ? 2.0f : ((thrustdata.thrust_raw_comp[1] < 0.0f) ? 0.0f : thrustdata.thrust_raw_comp[1]);
