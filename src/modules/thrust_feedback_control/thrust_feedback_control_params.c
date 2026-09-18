@@ -633,6 +633,56 @@ PARAM_DEFINE_FLOAT(MOTOR_SPEED_MAX, 5000.0f);
  * @max 1.0
  */
 PARAM_DEFINE_FLOAT(TFC_U_MAX, 1f);
+// 新增+2026-09-18：g_x 积分坐标重标定总开关。
+/**
+ * IOLC integral g_x rescaling enable
+ *
+ * Set to 1 to preserve the input-domain integral contribution when g_x changes.
+ * Set to 0 to retain the original integral update.
+ *
+ * @group Thrust Feedback Control
+ * @min 0
+ * @max 1
+ * @decimal 0
+ * @increment 1
+ */
+PARAM_DEFINE_FLOAT(TFC_IRES_EN, 0.0f);
+
+// 新增+2026-09-18：重标定有效 g_x 下限。
+/**
+ * IOLC integral rescaling minimum g_x
+ *
+ * Non-positive values use the implementation minimum positive value (1e-9).
+ *
+ * @group Thrust Feedback Control
+ * @min 0
+ * @decimal 6
+ */
+PARAM_DEFINE_FLOAT(TFC_IRES_GMIN, 0.0f);
+
+// 新增+2026-09-18：重标定比例下限接口，默认关闭。
+/**
+ * IOLC integral rescaling ratio minimum
+ *
+ * Non-positive value disables this lower ratio limit.
+ *
+ * @group Thrust Feedback Control
+ * @min 0
+ * @decimal 3
+ */
+PARAM_DEFINE_FLOAT(TFC_IRES_RMIN, 0.0f);
+
+// 新增+2026-09-18：重标定比例上限接口，默认关闭。
+/**
+ * IOLC integral rescaling ratio maximum
+ *
+ * Non-positive value disables this upper ratio limit.
+ *
+ * @group Thrust Feedback Control
+ * @min 0
+ * @decimal 3
+ */
+PARAM_DEFINE_FLOAT(TFC_IRES_RMAX, 0.0f);
 // 新增+2026-09-16：LESO 观测器总开关参数定义。
 /**
  * LESO observer enable
@@ -646,7 +696,7 @@ PARAM_DEFINE_FLOAT(TFC_U_MAX, 1f);
  * @increment 1
  * @group Thrust Feedback Control
  */
-PARAM_DEFINE_FLOAT(TFC_LESO_EN, 1.0f);
+PARAM_DEFINE_FLOAT(TFC_LESO_EN, 0.0f);
 
 // 新增+2026-09-16：LESO 全局默认带宽参数定义。
 /**

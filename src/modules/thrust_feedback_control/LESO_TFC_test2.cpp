@@ -1047,7 +1047,6 @@ int ThrustFeedbackControl::main()
 	// 新增+2026-09-16：发布 LESO 独立 uORB 消息，供 logger 写入 ULog。
 	thrustlesodata_pub.publish(thrustlesodata);
 	}
-
         // =========================
         // thrust_control_data logging
         // =========================

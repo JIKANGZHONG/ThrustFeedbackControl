@@ -146,6 +146,14 @@ private:
 
         (ParamFloat<px4::params::MOTOR_SPEED_MAX>) _param_tfc_motor_speed_max,
         (ParamFloat<px4::params::TFC_U_MAX>) _param_tfc_u_max,
+        // 新增+2026-09-18：g_x 积分坐标重标定总开关；1 启用，0 保持原积分更新。
+        (ParamFloat<px4::params::TFC_IRES_EN>) _param_tfc_ires_en,
+        // 新增+2026-09-18：重标定有效 g_x 下限；非正值时 CPP 使用最小正数 1e-9。
+        (ParamFloat<px4::params::TFC_IRES_GMIN>) _param_tfc_ires_gmin,
+        // 新增+2026-09-18：单周期 g_x 重标定比例下限；非正值表示暂不启用该下限。
+        (ParamFloat<px4::params::TFC_IRES_RMIN>) _param_tfc_ires_rmin,
+        // 新增+2026-09-18：单周期 g_x 重标定比例上限；非正值表示暂不启用该上限。
+        (ParamFloat<px4::params::TFC_IRES_RMAX>) _param_tfc_ires_rmax,
 
         // 新增+2026-09-16：LESO 观测器总开关；默认关闭，避免改变既有 TFC 行为。
         (ParamFloat<px4::params::TFC_LESO_EN>) _param_tfc_leso_en,
