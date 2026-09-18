@@ -47,7 +47,7 @@ fi
 ###############################################################################
 #                        End Estimator Group Selection                        #
 ###############################################################################
-
+#通过SYS_CTRL_ALLOC参数判断启用control_allocator还是使用旧版mixer_module
 if param compare SYS_CTRL_ALLOC 1
 then
 	#
@@ -78,6 +78,7 @@ mc_hover_thrust_estimator start
 flight_mode_manager start
 mc_pos_control start
 
+thrust_feedback_control start
 #
 # Start Multicopter Land Detector.
 #

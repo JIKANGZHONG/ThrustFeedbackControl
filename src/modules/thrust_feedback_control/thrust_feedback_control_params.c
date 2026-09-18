@@ -554,24 +554,24 @@ PARAM_DEFINE_FLOAT(TFC_FAC_I, 0.7f);
  * @group Thrust Feedback Control
  */
 PARAM_DEFINE_FLOAT(SENSOR1_BIAS1, 260.0f);
-/**
- * Sensor1 Bias2
- *
- * @group Thrust Feedback Control
- */
-PARAM_DEFINE_FLOAT(SENSOR1_BIAS2, -635.0f);
+// /**
+//  * Sensor1 Bias2
+//  *
+//  * @group Thrust Feedback Control
+//  */
+// PARAM_DEFINE_FLOAT(SENSOR1_BIAS2, -635.0f);
 /**
  * Sensor2 Bias1
  *
  * @group Thrust Feedback Control
  */
 PARAM_DEFINE_FLOAT(SENSOR2_BIAS1, 0.0f);
-/**
- * Sensor2 Bias2
- *
- * @group Thrust Feedback Control
- */
-PARAM_DEFINE_FLOAT(SENSOR2_BIAS2, -785.0f);
+// /**
+//  * Sensor2 Bias2
+//  *
+//  * @group Thrust Feedback Control
+//  */
+// PARAM_DEFINE_FLOAT(SENSOR2_BIAS2, -785.0f);
 
 /**
  * Sensor3 Bias1
@@ -579,24 +579,24 @@ PARAM_DEFINE_FLOAT(SENSOR2_BIAS2, -785.0f);
  * @group Thrust Feedback Control
  */
 PARAM_DEFINE_FLOAT(SENSOR3_BIAS1, 156.0f);
-/**
- * Sensor3 Bias2
- *
- * @group Thrust Feedback Control
- */
-PARAM_DEFINE_FLOAT(SENSOR3_BIAS2, -266.0f);
+// /**
+//  * Sensor3 Bias2
+//  *
+//  * @group Thrust Feedback Control
+//  */
+// PARAM_DEFINE_FLOAT(SENSOR3_BIAS2, -266.0f);
 /**
  * Sensor4 Bias1
  *
  * @group Thrust Feedback Control
  */
 PARAM_DEFINE_FLOAT(SENSOR4_BIAS1, 261.0f);
-/**
- * Sensor4 Bias2
- *
- * @group Thrust Feedback Control
- */
-PARAM_DEFINE_FLOAT(SENSOR4_BIAS2, -465.0f);
+// /**
+//  * Sensor4 Bias2
+//  *
+//  * @group Thrust Feedback Control
+//  */
+// PARAM_DEFINE_FLOAT(SENSOR4_BIAS2, -465.0f);
 
 /**
  * Use filtered thrust data or not
@@ -610,3 +610,167 @@ PARAM_DEFINE_FLOAT(THR_USE_FIL, 0.0f);
  * @group Thrust Feedback Control
  */
 PARAM_DEFINE_FLOAT(ALPHA_TAU, 0.25f);
+/**
+ * Maximum motor speed limit (RPM)
+ *
+ * The upper bound for the internal motor speed estimate in the IOLC model.
+ *
+ * @group Thrust Feedback Control
+ * @min 100
+ * @max 6000
+ * @decimal 1
+ * @increment 100
+ */
+PARAM_DEFINE_FLOAT(MOTOR_SPEED_MAX, 5000.0f);
+/**
+ * Maximum control output limit (normalized)
+ *
+ * Upper saturation value for the IOLC output 'u' before PWM conversion.
+ * Typical range is 0.0~1.0, but original hardcoded value was 0.5.
+ *
+ * @group Thrust Feedback Control
+ * @min 0
+ * @max 1.0
+ */
+PARAM_DEFINE_FLOAT(TFC_U_MAX, 1f);
+// 新增+2026-09-16：LESO 观测器总开关参数定义。
+/**
+ * LESO observer enable
+ *
+ * Enable the observer-only LESO. This parameter does not enable
+ * disturbance compensation in the current implementation.
+ *
+ * @min 0
+ * @max 1
+ * @decimal 0
+ * @increment 1
+ * @group Thrust Feedback Control
+ */
+PARAM_DEFINE_FLOAT(TFC_LESO_EN, 1.0f);
+
+// 新增+2026-09-16：LESO 全局默认带宽参数定义。
+/**
+ * LESO default observer bandwidth
+ *
+ * Default observer bandwidth omega_o used by all motors without an
+ * individual positive override. A conservative initial value for the
+ * current approximately 100 Hz thrust measurement is 45 rad/s.
+ *
+ * @unit rad/s
+ * @min 1.0
+ * @max 100.0
+ * @decimal 1
+ * @increment 1.0
+ * @group Thrust Feedback Control
+ */
+PARAM_DEFINE_FLOAT(TFC_LESO_WO, 45.0f);
+
+// 新增+2026-09-16：电机 1 LESO 带宽覆盖参数定义。
+/**
+ * LESO bandwidth override motor 1
+ *
+ * Positive value overrides TFC_LESO_WO for motor 1.
+ * Zero means use TFC_LESO_WO.
+ *
+ * @unit rad/s
+ * @min 0.0
+ * @max 100.0
+ * @decimal 1
+ * @increment 1.0
+ * @group Thrust Feedback Control
+ */
+PARAM_DEFINE_FLOAT(TFC_LESO_WO1, 45.0f);
+
+// 新增+2026-09-16：电机 2 LESO 带宽覆盖参数定义。
+/**
+ * LESO bandwidth override motor 2
+ *
+ * Positive value overrides TFC_LESO_WO for motor 2.
+ * Zero means use TFC_LESO_WO.
+ *
+ * @unit rad/s
+ * @min 0.0
+ * @max 100.0
+ * @decimal 1
+ * @increment 1.0
+ * @group Thrust Feedback Control
+ */
+PARAM_DEFINE_FLOAT(TFC_LESO_WO2, 45.0f);
+
+// 新增+2026-09-16：电机 3 LESO 带宽覆盖参数定义。
+/**
+ * LESO bandwidth override motor 3
+ *
+ * Positive value overrides TFC_LESO_WO for motor 3.
+ * Zero means use TFC_LESO_WO.
+ *
+ * @unit rad/s
+ * @min 0.0
+ * @max 100.0
+ * @decimal 1
+ * @increment 1.0
+ * @group Thrust Feedback Control
+ */
+PARAM_DEFINE_FLOAT(TFC_LESO_WO3, 45.0f);
+
+// 新增+2026-09-16：电机 4 LESO 带宽覆盖参数定义。
+/**
+ * LESO bandwidth override motor 4
+ *
+ * Positive value overrides TFC_LESO_WO for motor 4.
+ * Zero means use TFC_LESO_WO.
+ *
+ * @unit rad/s
+ * @min 0.0
+ * @max 100.0
+ * @decimal 1
+ * @increment 1.0
+ * @group Thrust Feedback Control
+ */
+PARAM_DEFINE_FLOAT(TFC_LESO_WO4, 45.0f);
+
+// 新增+2026-09-16：LESO 扰动状态限幅参数定义。
+/**
+ * LESO disturbance-state limit
+ *
+ * Absolute limit of d_hat. Its unit is the same as the thrust-derivative
+ * unit used by the current TFC model. A value of zero disables LESO update
+ * in the current implementation.
+ *
+ * @min 1.0
+ * @max 1000.0
+ * @decimal 1
+ * @increment 10.0
+ * @group Thrust Feedback Control
+ */
+PARAM_DEFINE_FLOAT(TFC_LESO_DSMAX, 200.0f);
+
+// 新增+2026-09-16：LESO 主动补偿增益参数定义。
+/**
+ * LESO active-compensation gain k_d
+ *
+ * Zero preserves observer-only behaviour. Increase only through controlled
+ * ground testing after the observer and input chain have been verified.
+ *
+ * @group Thrust Feedback Control
+ * @min 0
+ * @max 1
+ * @decimal 2
+ * @increment 0.05
+ */
+PARAM_DEFINE_FLOAT(TFC_LESO_KD, 0.0f);
+
+// 新增+2026-09-16：LESO 补偿限幅参数定义。
+/**
+ * LESO compensation limit (N/s)
+ *
+ * This limit is applied to d_hat before it enters the control law. A
+ * non-positive value disables active compensation even if TFC_LESO_KD > 0.
+ *
+ * @group Thrust Feedback Control
+ * @min 0
+ * @max 200
+ * @decimal 1
+ * @increment 1
+ */
+PARAM_DEFINE_FLOAT(TFC_LESO_DCMAX, 0.0f);

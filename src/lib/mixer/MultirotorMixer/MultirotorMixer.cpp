@@ -590,19 +590,32 @@ MultirotorMixer::mix(float *outputs, unsigned space)
 	thrustdesireddata.open_loop_control_output3 = outputs[2];
 	thrustdesireddata.open_loop_control_output4 = outputs[3];
 
-	if ((thrustcontroldata.thrust_start > 0.5f)&&(thrustcontroldata.thrust_start < 1.5f))
+	// if ((thrustcontroldata.thrust_start > 0.5f)&&(thrustcontroldata.thrust_start < 1.5f))
+	// {
+	// 	outputs[0] = thrustcontroldata.thrust_control_out_pwm1;
+	// 	outputs[1] = thrustcontroldata.thrust_control_out_pwm2;
+	// 	outputs[2] = thrustcontroldata.thrust_control_out_pwm3;
+	// 	outputs[3] = thrustcontroldata.thrust_control_out_pwm4;
+	// }
+	// else if(thrustcontroldata.thrust_start > 1.6f)
+	// {
+	// 	outputs[0] = thrustcontroldata.thrust_kalman_filter_control_out_pwm1;
+	// 	outputs[1] = thrustcontroldata.thrust_kalman_filter_control_out_pwm2;
+	// 	outputs[2] = thrustcontroldata.thrust_kalman_filter_control_out_pwm3;
+	// 	outputs[3] = thrustcontroldata.thrust_kalman_filter_control_out_pwm4;
+	// }
+
+	if ((thrustcontroldata.thrust_start > 0.5f) && (thrustcontroldata.thrust_start < 1.5f))
 	{
-		outputs[0] = thrustcontroldata.thrust_control_out_pwm1;
-		outputs[1] = thrustcontroldata.thrust_control_out_pwm2;
-		outputs[2] = thrustcontroldata.thrust_control_out_pwm3;
-		outputs[3] = thrustcontroldata.thrust_control_out_pwm4;
+		for (int i = 0; i < 4; i++) {
+			outputs[i] = thrustcontroldata.thrust_control_out_pwm[i];
 	}
-	else if(thrustcontroldata.thrust_start > 1.6f)
+	}
+	else if (thrustcontroldata.thrust_start > 1.6f)
 	{
-		outputs[0] = thrustcontroldata.thrust_kalman_filter_control_out_pwm1;
-		outputs[1] = thrustcontroldata.thrust_kalman_filter_control_out_pwm2;
-		outputs[2] = thrustcontroldata.thrust_kalman_filter_control_out_pwm3;
-		outputs[3] = thrustcontroldata.thrust_kalman_filter_control_out_pwm4;
+		for (int i = 0; i < 4; i++) {
+			outputs[i] = thrustcontroldata.thrust_kalman_filter_control_out_pwm[i];
+	}
 	}
 
 	thrustdesireddata.full_process_output1 = outputs[0];
@@ -610,8 +623,8 @@ MultirotorMixer::mix(float *outputs, unsigned space)
 	thrustdesireddata.full_process_output3 = outputs[2];
 	thrustdesireddata.full_process_output4 = outputs[3];
 
-	thrustdesireddata.timestamp = hrt_absolute_time();
-	_to_thrustdesireddata_report.publish(thrustdesireddata);
+	// thrustdesireddata.timestamp = hrt_absolute_time();
+	// _to_thrustdesireddata_report.publish(thrustdesireddata);
 
 	// Slew rate limiting and saturation checking
 	// 将最终的输出进行抗负向饱和以及变化速率限幅
@@ -670,6 +683,18 @@ MultirotorMixer::mix(float *outputs, unsigned space)
 		// 更新状态标志位
 		update_saturation_status(i, clipping_high, clipping_low_roll_pitch, clipping_low_yaw);
 	}
+	// 新增+2026-09-16：记录通道 1 经 mixer slew-rate limit 后的最终实际归一化 PWM 输出。
+	thrustdesireddata.final_output_post_slew[0] = outputs[0];
+	// 新增+2026-09-16：记录通道 2 经 mixer slew-rate limit 后的最终实际归一化 PWM 输出。
+	thrustdesireddata.final_output_post_slew[1] = outputs[1];
+	// 新增+2026-09-16：记录通道 3 经 mixer slew-rate limit 后的最终实际归一化 PWM 输出。
+	thrustdesireddata.final_output_post_slew[2] = outputs[2];
+	// 新增+2026-09-16：记录通道 4 经 mixer slew-rate limit 后的最终实际归一化 PWM 输出。
+	thrustdesireddata.final_output_post_slew[3] = outputs[3];
+	// 新增+2026-09-16：在全部最终输出字段写入后发布，供 TFC/LESO 读取上一周期实际输入。
+	thrustdesireddata.timestamp = hrt_absolute_time();
+	// 新增+2026-09-16：发布包含 slew 后最终 PWM 的完整 thrust_desired_data 消息。
+	_to_thrustdesireddata_report.publish(thrustdesireddata);
 
 	// this will force the caller of the mixer to always supply new slew rate values, otherwise no slew rate limiting will happen
 	// 将输出变化幅度的最大值置零，在每次进行混控前都要对该参数进行赋值，否则将不进行限幅。

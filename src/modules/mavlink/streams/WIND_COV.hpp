@@ -136,10 +136,10 @@ private:
 			msg.wind_z = thrustdata.thrust_kalman_filter_data_3;
 			msg.var_horiz = thrustdata.thrust_kalman_filter_data_4;
 
-			msg.var_vert = thrustcontroldata.thrust_desired1;
-			msg.wind_alt = thrustcontroldata.thrust_desired2;
-			msg.horiz_accuracy = thrustcontroldata.thrust_desired3;
-			msg.vert_accuracy = thrustcontroldata.thrust_desired4;
+			msg.var_vert = thrustcontroldata.thrust_desired[0];
+			msg.wind_alt = thrustcontroldata.thrust_desired[1];
+			msg.horiz_accuracy = thrustcontroldata.thrust_desired[2];
+			msg.vert_accuracy = thrustcontroldata.thrust_desired[3];
 
 			mavlink_msg_wind_cov_send_struct(_mavlink->get_channel(), &msg);
 

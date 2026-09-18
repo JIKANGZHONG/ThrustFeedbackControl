@@ -853,7 +853,7 @@ uint16_t MixingOutput::output_limit_calc_single(int i, float value) const
 	// 检查无效或禁用的通道
 	// 检查 value 是否是一个有限值（即不是无穷大或 NaN）
 	// 如果 value 不是有效的数字（如无效输入或通道被禁用），则返回 _disarmed_value[i]，表示该通道处于禁用或失效状态
-	if (!PX4_ISFINITE(value)) 
+	if (!PX4_ISFINITE(value))
 	{
 		// _disarmed_value[i] 是该通道对应的失效PWM值，通常为1000us或另一个定义的安全PWM值
 		return _disarmed_value[i];
@@ -862,7 +862,7 @@ uint16_t MixingOutput::output_limit_calc_single(int i, float value) const
 	// 输出反向检查
 	// 检查是否需要对输出值 value 进行反向处理
 	// _reverse_output_mask 是一个掩码，用于标识哪些输出通道需要反向输出。(1 << i) 表示第 i 个通道
-	if (_reverse_output_mask & (1 << i)) 
+	if (_reverse_output_mask & (1 << i))
 	{
 		// 如果反向输出掩码中的第 i 位为1，则该通道的 value 需要反向处理，即将 value 乘以 -1
 		value = -1.f * value;
@@ -1019,7 +1019,7 @@ MixingOutput::output_limit_calc(const bool armed, const int num_channels, const 
 		break;
 	}
 }
-
+// 发布控制器输出到actuator_outputs主题
 void
 MixingOutput::setAndPublishActuatorOutputs(unsigned num_outputs, actuator_outputs_s &actuator_outputs)
 {
@@ -1032,7 +1032,7 @@ MixingOutput::setAndPublishActuatorOutputs(unsigned num_outputs, actuator_output
 	actuator_outputs.timestamp = hrt_absolute_time();
 	_outputs_pub.publish(actuator_outputs);
 }
-
+// 更新混控器状态到control_allocator_status主题
 void
 MixingOutput::publishMixerStatus(const actuator_outputs_s &actuator_outputs)
 {
@@ -1229,7 +1229,7 @@ void MixingOutput::resetMixer()
 
 	_interface.mixerChanged();
 }
-
+//旧版架构下将具体的mixer类型配置进MixerGroup的mixers中，MixerGroup会在mix函数中调用具体的mixer类型的mix函数来计算输出
 int MixingOutput::loadMixer(const char *buf, unsigned len)
 {
 	if (_mixers == nullptr) {

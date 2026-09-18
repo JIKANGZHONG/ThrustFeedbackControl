@@ -58,11 +58,11 @@ MixerGroup::mix(float *outputs, unsigned space)
 {
 	unsigned index = 0;
 
-	for (auto mixer : _mixers) 
+	for (auto mixer : _mixers)
 	{
 		index += mixer->mix(outputs + index, space - index);
 
-		if (index >= space) 
+		if (index >= space)
 		{
 			break;
 		}

@@ -222,6 +222,7 @@ set(msg_files
 	robust_control_rate_error.msg
 	robust_control_data.msg
 	robust_control_data_pid.msg
+	thrust_leso_data.msg
 )
 
 if(NOT px4_constrained_flash_build)

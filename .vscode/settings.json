@@ -139,5 +139,6 @@
         },
         "cortex-debug.openocdPath": "${env:PICO_SDK_PATH}/../openocd/src/openocd",
         "ros.distro": "noetic",
-        "ROS2.distro": "noetic" // Added for rp2040
+        "ROS2.distro": "noetic", // Added for rp2040
+	"C_Cpp.default.compileCommands": "${workspaceFolder}/build/px4_fmu-v5_default/compile_commands.json"
 }

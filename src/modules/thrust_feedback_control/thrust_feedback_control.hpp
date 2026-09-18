@@ -65,6 +65,10 @@
 #include <uORB/topics/thrust_control_data.h>
 #include <uORB/topics/thrust_desired_data.h>
 #include <uORB/topics/actuator_controls.h>
+// 新增+2026-09-16：引入 LESO 参数快照 uORB 消息定义。
+#include <uORB/topics/thrust_leso_data.h>
+// 新增+2026-09-17：引入执行器状态用于订阅解锁信息
+#include <uORB/topics/actuator_armed.h>
 
 #include <uORB/topics/parameter_update.h>
 #include <px4_platform_common/module.h>
@@ -96,10 +100,10 @@ private:
 
     DEFINE_PARAMETERS(
         (ParamFloat<px4::params::TFC_THRUST_MAX>) _param_tfc_thrust_max,
-        (ParamFloat<px4::params::TFC_IOLC_K>) _param_tfc_iolc_k,
-        (ParamFloat<px4::params::TFC_IOLC_KI>) _param_tfc_iolc_ki,
+        // (ParamFloat<px4::params::TFC_IOLC_K>) _param_tfc_iolc_k,
+        // (ParamFloat<px4::params::TFC_IOLC_KI>) _param_tfc_iolc_ki,
         (ParamFloat<px4::params::TFC_LIM_I>) _param_tfc_lim_i,
-        (ParamFloat<px4::params::TFC_ALPHA>) _param_tfc_alpha,
+        // (ParamFloat<px4::params::TFC_ALPHA>) _param_tfc_alpha,
         (ParamFloat<px4::params::TFC_IOLC_KP1>) _param_tfc_iolc_kp1,
         (ParamFloat<px4::params::TFC_IOLC_KP2>) _param_tfc_iolc_kp2,
         (ParamFloat<px4::params::TFC_IOLC_KP3>) _param_tfc_iolc_kp3,
@@ -109,7 +113,7 @@ private:
         (ParamFloat<px4::params::TFC_IOLC_KI3>) _param_tfc_iolc_ki3,
         (ParamFloat<px4::params::TFC_IOLC_KI4>) _param_tfc_iolc_ki4,
         (ParamFloat<px4::params::TFC_START>) _param_tfc_start,
-        (ParamFloat<px4::params::TFC_IOLC_KFF>) _param_tfc_iolc_kff,
+        // (ParamFloat<px4::params::TFC_IOLC_KFF>) _param_tfc_iolc_kff,
         (ParamFloat<px4::params::TFC_IOLC_KFF_1>) _param_tfc_iolc_kff_1,
         (ParamFloat<px4::params::TFC_IOLC_KFF_2>) _param_tfc_iolc_kff_2,
         (ParamFloat<px4::params::TFC_IOLC_KFF_3>) _param_tfc_iolc_kff_3,
@@ -118,36 +122,68 @@ private:
         (ParamFloat<px4::params::TFC_PWM_TO_THR_2>) _param_tfc_pwm_to_thrust_factor2,
         (ParamFloat<px4::params::TFC_PWM_TO_THR_3>) _param_tfc_pwm_to_thrust_factor3,
         (ParamFloat<px4::params::TFC_PWM_TO_THR_4>) _param_tfc_pwm_to_thrust_factor4,
-        (ParamFloat<px4::params::TFC_MS_FF>) _param_tfc_ms_ff,
-        (ParamFloat<px4::params::TFC_PID_KP>) _param_tfc_pid_kp,
-        (ParamFloat<px4::params::TFC_PID_KI>) _param_tfc_pid_ki,
-        (ParamFloat<px4::params::TFC_PID_KD>) _param_tfc_pid_kd,
-        (ParamFloat<px4::params::TFC_FAC_I>) _param_tfc_fac_i,
-        (ParamFloat<px4::params::TFC_PID_LIM_I>) _param_tfc_pid_lim_i,
+        // (ParamFloat<px4::params::TFC_MS_FF>) _param_tfc_ms_ff,
+        // (ParamFloat<px4::params::TFC_PID_KP>) _param_tfc_pid_kp,
+        // (ParamFloat<px4::params::TFC_PID_KI>) _param_tfc_pid_ki,
+        // (ParamFloat<px4::params::TFC_PID_KD>) _param_tfc_pid_kd,
+        // (ParamFloat<px4::params::TFC_FAC_I>) _param_tfc_fac_i,
+        // (ParamFloat<px4::params::TFC_PID_LIM_I>) _param_tfc_pid_lim_i,
         (ParamFloat<px4::params::TFC_IOLC_K1>) _param_tfc_iolc_k1,
         (ParamFloat<px4::params::TFC_IOLC_K2>) _param_tfc_iolc_k2,
         (ParamFloat<px4::params::TFC_IOLC_K3>) _param_tfc_iolc_k3,
         (ParamFloat<px4::params::TFC_IOLC_K4>) _param_tfc_iolc_k4,
         (ParamFloat<px4::params::SENSOR1_BIAS1>) _param_sensor1_bias1,
-        (ParamFloat<px4::params::SENSOR1_BIAS2>) _param_sensor1_bias2,
+
         (ParamFloat<px4::params::SENSOR2_BIAS1>) _param_sensor2_bias1,
-        (ParamFloat<px4::params::SENSOR2_BIAS2>) _param_sensor2_bias2,
         (ParamFloat<px4::params::SENSOR3_BIAS1>) _param_sensor3_bias1,
-        (ParamFloat<px4::params::SENSOR3_BIAS2>) _param_sensor3_bias2,
         (ParamFloat<px4::params::SENSOR4_BIAS1>) _param_sensor4_bias1,
-        (ParamFloat<px4::params::SENSOR4_BIAS2>) _param_sensor4_bias2,
+        // (ParamFloat<px4::params::SENSOR1_BIAS2>) _param_sensor1_bias2,
+        // (ParamFloat<px4::params::SENSOR2_BIAS2>) _param_sensor2_bias2,
+        // (ParamFloat<px4::params::SENSOR3_BIAS2>) _param_sensor3_bias2,
+        // (ParamFloat<px4::params::SENSOR4_BIAS2>) _param_sensor4_bias2,
         (ParamFloat<px4::params::THR_USE_FIL>) _param_tfc_use_filtered_thrust,
-        (ParamFloat<px4::params::ALPHA_TAU>) _param_alpha_tau
+        // (ParamFloat<px4::params::ALPHA_TAU>) _param_alpha_tau,
+
+        (ParamFloat<px4::params::MOTOR_SPEED_MAX>) _param_tfc_motor_speed_max,
+        (ParamFloat<px4::params::TFC_U_MAX>) _param_tfc_u_max,
+
+        // 新增+2026-09-16：LESO 观测器总开关；默认关闭，避免改变既有 TFC 行为。
+        (ParamFloat<px4::params::TFC_LESO_EN>) _param_tfc_leso_en,
+        // 新增+2026-09-16：LESO 带宽 omega_o，单位 rad/s；非正值时禁止观测器更新。
+        (ParamFloat<px4::params::TFC_LESO_WO>) _param_tfc_leso_wo,
+        // 新增+2026-09-16：电机 1 的 LESO 带宽覆盖值；非正值时回退使用 TFC_LESO_WO。
+        (ParamFloat<px4::params::TFC_LESO_WO1>) _param_tfc_leso_wo1,
+        // 新增+2026-09-16：电机 2 的 LESO 带宽覆盖值；非正值时回退使用 TFC_LESO_WO。
+        (ParamFloat<px4::params::TFC_LESO_WO2>) _param_tfc_leso_wo2,
+        // 新增+2026-09-16：电机 3 的 LESO 带宽覆盖值；非正值时回退使用 TFC_LESO_WO。
+        (ParamFloat<px4::params::TFC_LESO_WO3>) _param_tfc_leso_wo3,
+        // 新增+2026-09-16：电机 4 的 LESO 带宽覆盖值；非正值时回退使用 TFC_LESO_WO。
+        (ParamFloat<px4::params::TFC_LESO_WO4>) _param_tfc_leso_wo4,
+        // 新增+2026-09-16：LESO 扰动状态 d_hat 的绝对限幅，单位为当前升力导数单位；非正值时禁止更新。
+        (ParamFloat<px4::params::TFC_LESO_DSMAX>) _param_tfc_leso_dsmax,
+        // LESO 主动补偿比例 k_d。0 表示 observer-only，范围限制为 [0, 1]。
+        (ParamFloat<px4::params::TFC_LESO_KD>) _param_tfc_leso_kd,
+        // 实际进入控制律的 d_comp 绝对限幅；非正值时关闭主动补偿。
+        (ParamFloat<px4::params::TFC_LESO_DCMAX>) _param_tfc_leso_dcmax
+
     )
 
     uORB::SubscriptionInterval	_parameter_update_sub{ORB_ID(parameter_update), 1_s};
 
     thrust_data_s thrustdata = {};
     uORB::Publication<thrust_data_s>  _thrustdata_pub{ORB_ID(thrust_data)};
+
+//   // 新增+2026-09-16：声明 LESO 独立日志消息缓存；实际定义放在 CPP 文件，避免 C++14 类内静态成员初始化错误。
+//     static thrust_leso_data_s thrustlesodata;
+//     // 新增+2026-09-16：声明 LESO 独立日志发布器；实际定义放在 CPP 文件。
+//     static uORB::Publication<thrust_leso_data_s> thrustlesodata_pub;
+
     ThrustKalmanFilter thrust_kalman_filter{1.0f};
+    // ThrustKalmanFilter thrust_kalman_filter2{1.0f};
 
     struct actuator_controls_s force_exp_from_rc{};
-
+    // Independent Kalman-filter instance for measured-thrust derivative estimation.
+    // It must not share DThrust states with the desired-thrust derivative filter.
 
     // 发布控制数据话题
     thrust_control_data_s thrustcontroldata = {};

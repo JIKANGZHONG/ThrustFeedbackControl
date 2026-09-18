@@ -39,8 +39,11 @@ px4_add_module(
         # thrust_feedback_control.cpp
         # thrust_feedback_control_test_20250619.cpp
         # thrust_feedback_control_test_FF_PI.cpp
-        thrust_feedback_control_test.cpp
         # thrust_feedback_control_test_pid.cpp
+        # thrust_feedback_control_test.cpp
+        # thrust_feedback_control_test260904.cpp
+        LESO_TFC_test.cpp
+        # LESO_TFC_Test2.cpp
         thrust_feedback_control_start.cpp
         thrust_kalman_filter.cpp
     DEPENDS
