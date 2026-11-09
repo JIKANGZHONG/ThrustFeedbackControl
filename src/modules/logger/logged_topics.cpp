@@ -57,7 +57,7 @@ void LoggedTopics::add_default_topics()
 	add_topic("thrust_control_data", 10);
 	add_topic("thrust_desired_data", 10);
 	// 新增+2026-09-16：以 10 ms 间隔记录 LESO 独立状态、输入及参数话题。
-	add_topic("thrust_leso_data", 10);
+	// add_topic("thrust_leso_data", 10);
 	add_topic("esc_input", 10);
 
 	add_topic("robust_control_data_pid", 10);
