@@ -511,7 +511,8 @@ int ThrustFeedbackControl::main()
 	appState.setRunning(true);
 
 	// Subscribe to four-channel force-sensor raw data
-	int thrustdata_sub_fd = orb_subscribe(ORB_ID(barometric_force_sensor));
+	// int thrustdata_sub_fd = orb_subscribe(ORB_ID(barometric_force_sensor));
+	int thrustdata_sub_fd = orb_subscribe(ORB_ID(pressure_force_sensor));
 
 	// Limit sensor subscription update interval to 10 ms (100 Hz)
 	orb_set_interval(thrustdata_sub_fd, 10);
@@ -712,7 +713,8 @@ int ThrustFeedbackControl::main()
 	// 新的四路力传感器数据到达。
 	// ====================================================
 	if (fds[0].revents & POLLIN) {
-		orb_copy(ORB_ID(barometric_force_sensor), thrustdata_sub_fd, &sensordata);
+		// orb_copy(ORB_ID(barometric_force_sensor), thrustdata_sub_fd, &sensordata);
+		orb_copy(ORB_ID(pressure_force_sensor), thrustdata_sub_fd, &sensordata);
 
 		// 自动零偏采集：仅在尚未完成标定、armed 状态已知且当前未解锁时执行。
 		if (!sensor_bias_initialized && armed_state_known && !actuator_armed.armed) {

@@ -223,6 +223,7 @@ set(msg_files
 	robust_control_data.msg
 	robust_control_data_pid.msg
 	thrust_leso_data.msg
+	pressure_force_sensor.msg
 )
 
 if(NOT px4_constrained_flash_build)

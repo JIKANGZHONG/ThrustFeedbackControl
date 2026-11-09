@@ -556,7 +556,10 @@ else
 	fi
 	unset BOARD_BOOTLOADER_UPGRADE
 
-	barometric_force_sensor start /dev/ttyS2
+	# barometric_force_sensor start /dev/ttyS2
+	# 停用原本的中转板，直接让飞控读取压力传感器ttl数据，代码位置：
+	# /home/zjk980212/quadrotor_tfc/src/drivers/pressure_force_sensor/pressure_force_sensor.cpp
+	pressure_force_sensor start -d /dev/ttyS2 -b 115200
 #
 # End of autostart.
 #
