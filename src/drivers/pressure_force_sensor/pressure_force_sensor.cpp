@@ -133,10 +133,15 @@ private:
 
                 // 发布
                 msg.timestamp = hrt_absolute_time();
-                msg.data1 = v0;
-                msg.data2 = v1;
-                msg.data3 = v2;
-                msg.data4 = v3;
+                // msg.data1 = v0;
+                // msg.data2 = v1;
+                // msg.data3 = v2;
+                // msg.data4 = v3;
+                // 重新映射为旋翼顺序：输入1~4 → 旋翼3、4、1、2
+                msg.data1 = v2;  // 输入4 → 旋翼1
+                msg.data2 = v3;  // 输入2 → 旋翼2
+                msg.data3 = v0;  // 输入1 → 旋翼3
+                msg.data4 = v1;  // 输入3 → 旋翼4
                 _pub.publish(msg);
 
                 if (_use_debug) {

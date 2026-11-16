@@ -174,7 +174,11 @@ MixerGroup::groups_required(uint32_t &groups)
 		mixer->groups_required(groups);
 	}
 }
-
+/* buf是传入的Mixer配置字符串，buflen是其长度，end指向buf的末尾。
+ * p是当前尚未解析的文本位置，*p是该位置的字符
+ * 本函数从混控配置文件中解析逐条解析混控器定义。它根据每条定义的第一个字符判断混控器类型，
+ * 调用对应子类的 from_text() 创建对象，成功后通过 add_mixer() 加入当前 MixerGroup
+ */
 int
 MixerGroup::load_from_buf(Mixer::ControlCallback control_cb, uintptr_t cb_handle, const char *buf, unsigned &buflen)
 {

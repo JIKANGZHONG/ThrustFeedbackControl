@@ -446,7 +446,8 @@ int ThrustFeedbackControl::main()
 	};
 
 	int error_counter = 0;
-	struct barometric_force_sensor_s sensordata{};
+	// struct barometric_force_sensor_s sensordata{};
+	struct pressure_force_sensor_s sensordata{};
 	struct thrust_desired_data_s thrustdesireddata{};
 	struct actuator_armed_s actuator_armed{};
 	bool armed_state_known = false;
@@ -693,19 +694,32 @@ int ThrustFeedbackControl::main()
                 thrustdesireddata.timestamp = hrt_absolute_time();
                 static uint64_t last_timestamp_dt = thrustdesireddata.timestamp;
 
-                // Reject NaN/Inf and constrain desired normalized thrust to [0, 1]
-                auto clean_desired = [](float raw, int idx) -> float {
-                    if (!PX4_ISFINITE(raw)) {
-                        return 0.0f;
-                    }
 
-                    return math::constrain(raw, 0.0f, 1.0f);
-                };
+		// ============================================================
+		// Sanitize all four desired-thrust inputs.
+		// Prevent NaN/Inf from entering the desired-thrust conversion
+		// and the IOLC feedforward calculation.
+		// ============================================================
+		auto clean_desired = [](float raw) -> float {
+		if (!PX4_ISFINITE(raw)) {
+			return 0.0f;
+		}
 
-                float des1 = clean_desired(thrustdesireddata.thrust_desired1, 1);
-                float des2 = clean_desired(thrustdesireddata.thrust_desired2, 2);
-                float des3 = clean_desired(thrustdesireddata.thrust_desired3, 3);
-                float des4 = clean_desired(thrustdesireddata.thrust_desired4, 4);
+		return math::constrain(raw, 0.0f, 1.0f);
+		};
+
+		// Valid normalized thrust commands in [0, 1]
+		const float des1 = clean_desired(thrustdesireddata.thrust_desired1);
+		const float des2 = clean_desired(thrustdesireddata.thrust_desired2);
+		const float des3 = clean_desired(thrustdesireddata.thrust_desired3);
+		const float des4 = clean_desired(thrustdesireddata.thrust_desired4);
+
+		// Update the local message copy so subsequent IOLC feedforward
+		// calculations use the validated values instead of raw inputs.
+		thrustdesireddata.thrust_desired1 = des1;
+		thrustdesireddata.thrust_desired2 = des2;
+		thrustdesireddata.thrust_desired3 = des3;
+		thrustdesireddata.thrust_desired4 = des4;
 
                 // Convert normalized controller demand to desired thrust
                 _thrust_desired(0) = _param_tfc_pwm_to_thrust_factor1.get() * des1;

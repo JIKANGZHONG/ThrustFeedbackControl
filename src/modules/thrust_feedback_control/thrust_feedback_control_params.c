@@ -59,7 +59,7 @@ PARAM_DEFINE_FLOAT(TFC_THRUST_MAX, 2.0f);
  * @reboot_required true
  * @group Thrust Feedback Control
  */
-PARAM_DEFINE_FLOAT(TFC_PWM_TO_THR_1, 2.312f);
+PARAM_DEFINE_FLOAT(TFC_PWM_TO_THR_1, 3.5f);
 
  /**
  * PWM to thrust conversion factor
@@ -74,7 +74,7 @@ PARAM_DEFINE_FLOAT(TFC_PWM_TO_THR_1, 2.312f);
  * @reboot_required true
  * @group Thrust Feedback Control
  */
-PARAM_DEFINE_FLOAT(TFC_PWM_TO_THR_2, 1.954f);
+PARAM_DEFINE_FLOAT(TFC_PWM_TO_THR_2, 3.5f);
 
  /**
  * PWM to thrust conversion factor
@@ -89,7 +89,7 @@ PARAM_DEFINE_FLOAT(TFC_PWM_TO_THR_2, 1.954f);
  * @reboot_required true
  * @group Thrust Feedback Control
  */
-PARAM_DEFINE_FLOAT(TFC_PWM_TO_THR_3, 2.544f);
+PARAM_DEFINE_FLOAT(TFC_PWM_TO_THR_3, 3.5f);
 
  /**
  * PWM to thrust conversion factor
@@ -104,7 +104,7 @@ PARAM_DEFINE_FLOAT(TFC_PWM_TO_THR_3, 2.544f);
  * @reboot_required true
  * @group Thrust Feedback Control
  */
-PARAM_DEFINE_FLOAT(TFC_PWM_TO_THR_4, 2.517f);
+PARAM_DEFINE_FLOAT(TFC_PWM_TO_THR_4, 3.5f);
 
 /**
  * The Limit value of I_out

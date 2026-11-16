@@ -201,8 +201,9 @@ SimpleMixer::from_text(Mixer::ControlCallback control_cb, uintptr_t cb_handle, c
 
 	/* find the next tag */
 	next_tag = findnexttag(end - buflen, buflen);
-
+	// 如果M后面是S，即没有显式指定输出缩放参数，使用默认值
 	if (next_tag == 'S') {
+
 		/* No output scalers specified. Use default values.
 		 * Corresponds to:
 		 * O:      10000  10000      0 -10000  10000 0
@@ -215,6 +216,7 @@ SimpleMixer::from_text(Mixer::ControlCallback control_cb, uintptr_t cb_handle, c
 		mixinfo->slew_rate_rise_time		= 0.0f;
 
 	} else {
+		 // 如果M后面配置了O，即显式指定了输出缩放参数，解析O并赋值给output_scaler
 		if (parse_output_scaler(end - buflen, buflen, mixinfo->output_scaler, mixinfo->slew_rate_rise_time)) {
 			debug("simple mixer parser failed parsing out scaler tag, ret: '%s'", buf);
 			goto out;
@@ -230,7 +232,7 @@ SimpleMixer::from_text(Mixer::ControlCallback control_cb, uintptr_t cb_handle, c
 			goto out;
 		}
 	}
-
+	// 创建SimpleMixer对象，并将mixinfo的所有权转移给它,并返回SimpleMixer对象指针
 	sm = new SimpleMixer(control_cb, cb_handle, mixinfo);
 
 	if (sm != nullptr) {
